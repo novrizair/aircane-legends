@@ -203,14 +203,14 @@ a. `Navigator.push()`:
    - `push()` akan menambahkan _route_ ke dalam _stack_ _route_ yang dikelola oleh `Navigator`.
    - Contoh penggunaannya
 
-   ```dart
-   ...
-    if (item.name == "Tambah Item") {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ShopFormPage()));
-    }
-    ...
-    ```
+```dart
+  ...
+  if (item.name == "Tambah Item") {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const ShopFormPage()));
+  }
+  ...
+```
 
 b. `Navigator.pushReplacement()`:
    - Untuk menambahkan layar baru ke tumpukan navigasi, tetapi menggantikan layar sebelumnya dalam prosesnya.
@@ -218,17 +218,17 @@ b. `Navigator.pushReplacement()`:
    - `pushReplacement()` akan menghapus _route_ yang sedang ditampilkan kepada pengguna dan menggantinya dengan _route_ lain.
    - Contoh penggunaannya
 
-    ```dart
-   ...
-    onTap: () {
-        Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MyHomePage(),
-        ));
-    },
-    ...
-    ```
+```dart
+  ...
+  onTap: () {
+      Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MyHomePage(),
+      ));
+  },
+  ...
+```
 </details>
 
 <details>
@@ -308,108 +308,108 @@ c. _Presentation Layer_:
 
 - Membuat minimal satu halaman baru pada aplikasi, yaitu `shoplist_form.dart` baru dengan tiga elemen input, yaitu `name`, `amount`, `description` (+ validasi input) serta tombol `save`.
 
-            ```dart
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Item Name",
-                  labelText: "Item Name",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                ),
-                onChanged: (String? value) {
-                  setState(() {
-                    _name = value!;
-                  });
-                },
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return "Item Name tidak boleh kosong!";
-                  }
-                  return null;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Amount",
-                  labelText: "Amount",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                ),
-                onChanged: (String? value) {
-                  setState(() {
-                    _amount = int.parse(value!);
-                  });
-                },
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return "Amount tidak boleh kosong!";
-                  }
-                  if (int.tryParse(value) == null) {
-                    return "Amount harus berupa angka!";
-                  }
-                  return null;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Description",
-                  labelText: "Description",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                ),
-                onChanged: (String? value) {
-                  setState(() {
-                    _description = value!;
-                  });
-                },
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return "Description tidak boleh kosong!";
-                  }
-                  return null;
-                },
-              ),
-            ),
-            ...
-            // Pembuatan tombol SAVE
-            child: const Text(
-                    "SAVE",
-                    style: TextStyle(color: Colors.white),
-                  ),
-          ```
+```dart
+Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: TextFormField(
+    decoration: InputDecoration(
+      hintText: "Item Name",
+      labelText: "Item Name",
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+    ),
+    onChanged: (String? value) {
+      setState(() {
+        _name = value!;
+      });
+    },
+    validator: (String? value) {
+      if (value == null || value.isEmpty) {
+        return "Item Name tidak boleh kosong!";
+      }
+      return null;
+    },
+  ),
+),
+Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: TextFormField(
+    decoration: InputDecoration(
+      hintText: "Amount",
+      labelText: "Amount",
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+    ),
+    onChanged: (String? value) {
+      setState(() {
+        _amount = int.parse(value!);
+      });
+    },
+    validator: (String? value) {
+      if (value == null || value.isEmpty) {
+        return "Amount tidak boleh kosong!";
+      }
+      if (int.tryParse(value) == null) {
+        return "Amount harus berupa angka!";
+      }
+      return null;
+    },
+  ),
+),
+Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: TextFormField(
+    decoration: InputDecoration(
+      hintText: "Description",
+      labelText: "Description",
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+    ),
+    onChanged: (String? value) {
+      setState(() {
+        _description = value!;
+      });
+    },
+    validator: (String? value) {
+      if (value == null || value.isEmpty) {
+        return "Description tidak boleh kosong!";
+      }
+      return null;
+    },
+  ),
+),
+...
+// Pembuatan tombol SAVE
+child: const Text(
+        "SAVE",
+        style: TextStyle(color: Colors.white),
+      ),
+```
 
 - Mengarahkan pengguna ke halaman _form_ tambah _item_ baru ketika menekan tombol `Tambah Item` pada halaman utama. Untuk bonus, arahkan juga pengguna ke halaman _list_ daftar _item_ baru ketika menekan tombol `Lihat Item` pada halaman utama.
 
-          ```dart
-          if (item.name == "Tambah Item") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ShopFormPage(),
-              ),
-            );
-          }
+```dart
+  if (item.name == "Tambah Item") {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ShopFormPage(),
+      ),
+    );
+  }
 
-          if (item.name == "Lihat Item") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ItemListPage(),
-              ),
-            );
-          }
-          ```
+  if (item.name == "Lihat Item") {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ItemListPage(),
+      ),
+    );
+  }
+```
 
 - Memunculkan data sesuai isi dari formulir yang diisi dalam sebuah pop-up setelah menekan tombol `Save` pada halaman formulir tambah _item_ baru.
 
@@ -462,3 +462,7 @@ c. _Presentation Layer_:
 ### Sumber Bacaan Tugas 8
 - https://pbp-fasilkom-ui.github.io/ganjil-2024/docs/tutorial-7
 - https://api.flutter.dev/flutter/widgets/Navigator-class.html
+
+--- 
+
+## Tugas 9: (Coming soon...)
