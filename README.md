@@ -190,4 +190,275 @@ class ShopCard extends StatelessWidget {
 
 --- 
 
-## Tugas 8: (coming soon...)
+## Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements
+
+<details>
+<summary>1. Jelaskan perbedaan antara Navigator.push() dan Navigator.pushReplacement(), disertai dengan contoh mengenai penggunaan kedua metode tersebut yang tepat!</summary>
+
+Dalam konteks _software development_ berbasis Flutter, `Navigator.push()` dan `Navigator.pushReplacement()` merupakan metode untuk menavigasi antara berbagai layar dalam aplikasi. Utamanya, perbedaannya terletak pada caranya dalam memanipulasi tumpukan navigasi. Berikut ini perbedaannya secara lebih rinci di antara keduanya dan contohnya:
+
+a. `Navigator.push()`:
+   - Untuk menambahkan layar baru ke tumpukan navigasi tanpa menghapus layar sebelumnya dari tumpukan.
+   - Dapat memungkinkan _user_ untuk kembali ke layar sebelumnya dengan menekan tombol `back` di perangkatnya.
+   - `push()` akan menambahkan _route_ ke dalam _stack_ _route_ yang dikelola oleh `Navigator`.
+   - Contoh penggunaannya
+
+   ```dart
+   ...
+    if (item.name == "Tambah Item") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ShopFormPage()));
+    }
+    ...
+    ```
+
+b. `Navigator.pushReplacement()`:
+   - Untuk menambahkan layar baru ke tumpukan navigasi, tetapi menggantikan layar sebelumnya dalam prosesnya.
+   - Dapat mengganti layar saat ini dengan layar baru dan menghapus layar yang sebelumnya ada di tumpukan.
+   - `pushReplacement()` akan menghapus _route_ yang sedang ditampilkan kepada pengguna dan menggantinya dengan _route_ lain.
+   - Contoh penggunaannya
+
+    ```dart
+   ...
+    onTap: () {
+        Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyHomePage(),
+        ));
+    },
+    ...
+    ```
+</details>
+
+<details>
+<summary>2. Jelaskan masing-masing layout widget pada Flutter dan konteks penggunaannya masing-masing!</summary>
+
+Setiap _layout widget_ memiliki perannya masing-masing dalam mengatur tata letak aplikasi. Berikut ini penjelasan rinci terkait jenis-jenis dan konteks penggunaannya:
+
+a. _Container_:
+- Merupakan sebuah _widget_ serbaguna yang dapat mengatur tata letak dan tampilan anak-anaknya dengan berbagai properti seperti _padding_, _margin_, _decoration_, dan lain-lain.
+- Digunakan untuk mengelompokkan _widget_ lain, mengatur properti tata letak seperti _padding_, _margin_, dan menerapkan dekorasi seperti warna, gambar latar, atau bentuk pada elemen.
+
+b. _Row_:
+- Merupakan sebuah _widget_ yang mengatur elemen-elemen anak secara horizontal, berturut-turut dari kiri ke kanan.
+- Digunakan untuk menyusun _widget_ secara horizontal, seperti menyusun tombol, teks, atau _widget_ lain secara berdampingan.
+
+c. _Column_:
+- Merupakan sebuah _widget_ yang mengatur elemen-elemen anak secara vertikal, dari atas ke bawah.
+- Digunakan untuk menyusun _widget_ secara vertikal, seperti susunan teks, gambar, atau _widget_ lain secara berurutan dari atas ke bawah.
+
+d. _ListView_:
+- Merupakan sebuah _widget_ yang memungkinkan tampilan daftar dengan anak-anaknya yang dapat digulir.
+- Digunakan untuk menampilkan daftar elemen yang bisa digulir, seperti daftar kontak, pesan, atau _item_ dalam suatu aplikasi.
+
+e. _Stack_:
+- Merupakan sebuah _widget_ yang mengatur anak-anaknya berdasarkan posisi, yang memungkinkan penumpukan dan penempatan elemen secara bebas di atas satu sama lain.
+- Digunakan saat ingin menempatkan elemen secara terpisah, seperti teks di atas gambar, elemen _overlap_, atau tata letak yang lebih kompleks.
+
+f. _Expanded & Flexible_:
+- Keduanya digunakan dalam tata letak fleksibel. Expanded akan memberi widget anak ruang tambahan berdasarkan proporsi tertentu. Sedangkan, Flexible akan memberikan fleksibilitas dalam mengisi ruang berdasarkan faktor tertentu, seperti _flex_.
+</details>
+
+<details>
+<summary>3. Sebutkan apa saja elemen input pada form yang kamu pakai pada tugas kali ini dan jelaskan mengapa kamu menggunakan elemen input tersebut!</summary>
+
+Pada tugas kali ini, saya menggunakan beberapa elemen _input_ pada _form_ yang digunakan untuk mengumpulkan data dari pengguna. Elemen-elemen tersebut di antaranya:
+
+a. TextFormField "Item Name":
+- Untuk mengumpulkan _input_ nama _item_ tipe data String dari pengguna.
+- Diberikan suatu _validator_ agar _input_ yang dimasukkan tipe datanya sesuai.
+
+b. TextFormField "Amount":
+- Untuk mengumpulkan _input_ jumlah _item_ tipe data int dari pengguna.
+- Diberikan suatu _validator_ agar _input_ yang dimasukkan tipe datanya sesuai.
+
+c. TextFormField "Description":
+- Untuk mengumpulkan _input_ deskripsi _item_ tipe data String dari pengguna.
+- Diberikan suatu _validator_ agar _input_ yang dimasukkan tipe datanya sesuai.
+</details>
+
+<details>
+<summary>4. Bagaimana penerapan clean architecture pada aplikasi Flutter?</summary>
+
+_Clean Architecture_ merupakan pendekatan _software design_ untuk memisahkan bagian-bagian aplikasi agar lebih mudah dipahami, dioptimalkan, dan diuji. Dalam Flutter, penerapan _Clean Architecture _akan sangat membantu memisahkan peran-peran inti dalam aplikasi:
+
+a. _Domain Layer_ (_Core_):
+
+- Merupakan bagian terdalam dan mendasar dari aplikasi. 
+- Isinya adalah aturan bisnis, logika, dan model domain yang bersifat agnostik _platform_.
+- Tidak bergantung pada Flutter atau suatu_platform_ tertentu.
+- Dapat berisi entitas dan abstraksi _repository_.
+
+b. _Data Layer_:
+
+- Berisi implementasi konkrit dari abstraksi yang didefinisikan di _domain layer_.
+- Menyediakan implementasi spesifik untuk interaksi dengan sumber data, seperti _database_, API, atau penyimpanan lokal.
+- Adalah suatu jembatan antara _domain layer_ dengan sumber data eksternal.
+
+c. _Presentation Layer_:
+
+- Merupakan bagian yang terhubung langsung dengan Flutter.
+- Bertanggung jawab untuk mengatur UI, _state management_, dan interaksi pengguna.
+- Memanfaatkan fitur-fitur dari Flutter seperti _widget_, BLoC, atau _Provider_ untuk mengatur tampilan dan interaksi pengguna.
+</details>
+
+<details>
+<summary>5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (Bukan hanya sekadar mengikuti tutorial)</summary>
+
+- Membuat minimal satu halaman baru pada aplikasi, yaitu `shoplist_form.dart` baru dengan tiga elemen input, yaitu `name`, `amount`, `description` (+ validasi input) serta tombol `save`.
+
+            ```dart
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: "Item Name",
+                  labelText: "Item Name",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                onChanged: (String? value) {
+                  setState(() {
+                    _name = value!;
+                  });
+                },
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Item Name tidak boleh kosong!";
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: "Amount",
+                  labelText: "Amount",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                onChanged: (String? value) {
+                  setState(() {
+                    _amount = int.parse(value!);
+                  });
+                },
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Amount tidak boleh kosong!";
+                  }
+                  if (int.tryParse(value) == null) {
+                    return "Amount harus berupa angka!";
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: "Description",
+                  labelText: "Description",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                onChanged: (String? value) {
+                  setState(() {
+                    _description = value!;
+                  });
+                },
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Description tidak boleh kosong!";
+                  }
+                  return null;
+                },
+              ),
+            ),
+            ...
+            // Pembuatan tombol SAVE
+            child: const Text(
+                    "SAVE",
+                    style: TextStyle(color: Colors.white),
+                  ),
+          ```
+
+- Mengarahkan pengguna ke halaman _form_ tambah _item_ baru ketika menekan tombol `Tambah Item` pada halaman utama. Untuk bonus, arahkan juga pengguna ke halaman _list_ daftar _item_ baru ketika menekan tombol `Lihat Item` pada halaman utama.
+
+          ```dart
+          if (item.name == "Tambah Item") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShopFormPage(),
+              ),
+            );
+          }
+
+          if (item.name == "Lihat Item") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ItemListPage(),
+              ),
+            );
+          }
+          ```
+
+- Memunculkan data sesuai isi dari formulir yang diisi dalam sebuah pop-up setelah menekan tombol `Save` pada halaman formulir tambah _item_ baru.
+
+- Membuat sebuah _drawer_ (halaman utama, tambah _item_, dan lihat _item_ (bonus). Lalu, arahkan ke masing-masing halamannya) pada aplikasi.
+
+    ```dart
+          ListTile(
+            leading: const Icon(Icons.home_outlined),
+            title: const Text('Halaman Utama'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyHomePage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.add_shopping_cart),
+            title: const Text('Tambah Item'),
+            // Bagian redirection ke ShopFormPage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShopFormPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.list),
+            title: const Text('Lihat Item'),
+            // Bagian redirection ke ItemListPage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemListPage(),
+                  ));
+            },
+          ),
+    ```
+
+- Tak lupa, lakukan _refactoring file_, pindahkan file `item_page.dart`, `menu.dart`, dan `shoplist_form.dart` ke folder `screens`.
+
+- Kerjakanlah README.md yang memiliki 5 pertanyaan. Kemudian, lakukanlah `git add .`, `git commit -m "TUGAS 8 + BONUS DONE`, dan `git push origin main`.
+</details>
+
+### Sumber Bacaan Tugas 8
+- https://pbp-fasilkom-ui.github.io/ganjil-2024/docs/tutorial-7
+- https://api.flutter.dev/flutter/widgets/Navigator-class.html
