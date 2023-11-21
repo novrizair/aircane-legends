@@ -465,4 +465,179 @@ child: const Text(
 
 --- 
 
-## Tugas 9: (Coming soon...)
+## Tugas 9: Integrasi Layanan Web Django dengan Aplikasi Flutter
+
+<details><summary>1. Apakah bisa kita melakukan pengambilan data JSON tanpa membuat model terlebih dahulu? Jika iya, apakah hal tersebut lebih baik daripada membuat model sebelum melakukan pengambilan data JSON?</summary>
+
+Ya, kita dapat ambil data JSON tanpa membuat model terlebih dahulu. Namun, ada beberapa kondisi tertentu yang mana jika membuat model akan memberikan keuntungan. Berikut ini perbandingannya:
+
+- Dengan model, maka akan sangat cocok untuk analisis data yang sifatnya kompleks. Jadi, jika tidak menggunakan model pada analisis data yang kompleks tidaklah cocok.
+- Dengan model, juga cocok untuk struktur data yang terstruktur.
+- Dengan model, pengambilan datanya membutuhkan langkah-langkah dalam pembuatan modelnya.
+
+</details>
+
+<details><summary>2. Jelaskan fungsi dari CookieRequest dan jelaskan mengapa instance CookieRequest perlu untuk dibagikan ke semua komponen di aplikasi Flutter.</summary>
+
+`CookieRequest` berfungsi mengirimkan permintaan HTTP yang menyertakan _cookie_ tertentu yang diperlukan _server_. Hal tersebut dapat menjadi sebuah bagian yang integral dari manajemen _session_ atau autentikasi dalam suatu aplikasi. Kemudian, _instance_ dari `CookieRequest` harus dibagi ke seluruh komponen dalam aplikasi flutter, beberapa alasannya sebagai berikut:
+
+- Jika terdapat perubahan logika `CookieRequest`, maka secara otomatis akan tercermin di seluruh aplikasi. Hal tersebut disebabkan seluruh komponen menggunakan _instance_ sama.
+- Pengelolaan _cookie_ konsisten di seluruh aplikasi. Hal tersebut akan membantu mencegah risiko yang dapat terjadi jika setiap komponen memiliki _instance_-nya sendiri.
+- Pemeliharaan `CookieRequest` akan mudah karena hanya butuh dilakukan pada satu _instance_ saja. Hal tersebut akan dapat mengurangi risiko kesalahan dan memudahkan pemeliharaan.
+
+</details>
+
+<details><summary>3. Jelaskan mekanisme pengambilan data dari JSON hingga dapat ditampilkan pada Flutter.</summary>
+
+Berikut ini beberapa langkah mekanisme pengambilan data dari JSON hingga dapat ditampilkan pada Flutter, di antaranya:
+
+- Data JSON salah satunya dapat diperoleh dari API dengan menggunakan metode HTTP, seperti `GET` untuk dapat respons data JSON. Lalu, ubah _string_ JSON menjadi struktur data yang dapat diakses Flutter. Hal tersebut dapat dilakukan dengan kelas `dart:convert`.
+- Kemudian, jika ingin data JSON strukturnya tetap dan ingin menggunakan objek Dart, buatlah suatu model objek untuk ubah JSON menjadi objek Dart.
+- Lalu, gunakanlah _widget_ Flutter untuk menampilkan data pada UI. Terakhir, setelah data dari JSON diberikan, _developer_ dapat menavigasi pengguna ke halaman baru untuk menampilkan data tersebut.
+</details>
+
+
+<details><summary>4. Jelaskan mekanisme autentikasi dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.</summary>
+
+Berikut ini mekanisme autentikasinya:
+- _User input_ data-data tentang akun tersebut, contohnya nama dan _password_.
+- Data tersebut dikirim Flutter ke _server_ Django dengan HTTP _Request_, contohnya POST. Kemudian, data akan diterima dan diverifikasi oleh Django.
+- Lalu, Django akan mengirimkan status autentikasi _valid_ atau pesan kegagalan (jika gagal _login_) ke Flutter. Jika berhasil _login_, maka Flutter akan menampilkan _webpage_ yang sesuai.
+
+</details>
+<details><summary>5. Sebutkan seluruh widget yang kamu pakai pada tugas ini dan jelaskan fungsinya masing-masing.</summary>
+
+- AppBar: _Widget_ yang akan menampilkan bilah aplikasi pada bagian atas halaman.
+- MaterialApp: _Widget_ _root_ untuk menginisialisasi Flutter.
+- SingleChildScrollView: _Widget_ yang memungkinkan kontennya dapat di-_scroll_ jika melebihi ukuran layar.
+- Column: _Widget_ yang mengatur _widget_-chil_d secara vertikal.
+- Text: _Widget_ untuk menampilkan teks.
+- SizedBox: _Widget_ untuk memberikan ruang kosong dengan _size_ tertentu.
+- ElevatedButton: _Widget_ untuk membuat tombol dengan latar belakang.
+- Scaffold: _Widget_ yang menyediakan struktur dasar untuk halaman, termasuk AppBar, Drawer, dan body.
+- LeftDrawer: _Widget_ kustom untuk konten drawer di sisi kiri halaman.
+</details>
+
+<details><summary>6. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial).</summary>
+
+- Membuat halaman _login_ pada _project_ tugas Flutter integrasikan sistem autentikasi Django dengan _project_ tugas Flutter, serta menginstall dan menambahkan _library_ yang dibutuhkan dengan menjalankan `pip install django-cors-headers`. Kemudian, tambahkan Cookies dengan menambahkan kode berikut ke `settings.py`:
+
+```python
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
+```
+
+- Membuat fungsi _login_ pada `views.py` di file autentikasi lalu menghubungkannya ke `urls.py`.
+
+```python
+from django.shortcuts import render
+from django.contrib.auth import authenticate, login as auth_login
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            auth_login(request, user)
+            # Status login sukses.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login sukses!"
+                # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Login gagal, akun dinonaktifkan."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Login gagal, periksa kembali email atau kata sandi."
+        }, status=401)
+```
+
+- Membuat kustom model sesuai dengan proyek aplikasi Django dengan mem-_parse_ data JSON dari tugas Django sebelumnya dengan menggunakan _website_ Quicktype dan menyimpan kode Quicktype tersebut ke tugas Flutter.
+
+```dart
+// To parse this JSON data, do
+//
+//     final product = productFromJson(jsonString);
+
+import 'dart:convert';
+
+List<Product> productFromJson(String str) => List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
+
+String productToJson(List<Product> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Product {
+    String model;
+    int pk;
+    Fields fields;
+
+    Product({
+        required this.model,
+        required this.pk,
+        required this.fields,
+    });
+
+    factory Product.fromJson(Map<String, dynamic> json) => Product(
+        model: json["model"],
+        pk: json["pk"],
+        fields: Fields.fromJson(json["fields"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "model": model,
+        "pk": pk,
+        "fields": fields.toJson(),
+    };
+}
+
+class Fields {
+    int user;
+    String name;
+    int amount;
+    String description;
+
+    Fields({
+        required this.user,
+        required this.name,
+        required this.amount,
+        required this.description,
+    });
+
+    factory Fields.fromJson(Map<String, dynamic> json) => Fields(
+        user: json["user"],
+        name: json["name"],
+        amount: json["amount"],
+        description: json["description"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "user": user,
+        "name": name,
+        "amount": amount,
+        "description": description,
+    };
+}
+```
+
+- Buat halaman yang berisi daftar item. Hal tersebut dilakukan dengan menghubungkan web tugas Django ke tugas Flutter. Kemudian, jangan lupa untuk tampilkan _name_, _amount_, dan _description_ masing-masing _item_.
+
+- Buat halaman yang berisi detail item. Hal ini dilakukan dengan membuat tombol detail pada `list_product.dart`.
+</details>
+
+ ### Sumber Bacaan Tugas 9
+ - https://pbp-fasilkom-ui.github.io/ganjil-2024/docs/tutorial-8
+ 
