@@ -44,22 +44,13 @@ class ShopCard extends StatelessWidget {
                 builder: (context) => ShopFormPage(),
               ),
             );
-          }
-          // Navigate ke route yang sesuai (tergantung jenis tombol)
-          else if (item.name == "Lihat Item") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductPage(),
-              ),
-            );
-          } else if (item.name == "Lihat Produk") {
+          } else if (item.name == "Daftar Item") {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const ProductPage()));
           } else if (item.name == "Logout") {
             final response = await request.logout(
                 // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                 "http://localhost:8000/auth/logout/");
+                "http://localhost:8000/auth/logout/");
             String message = response["message"];
             if (response['status']) {
               String uname = response["username"];

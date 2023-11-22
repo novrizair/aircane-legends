@@ -8,7 +8,7 @@ class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
 
   final List<ShopItem> items = [
-    ShopItem("Lihat Item", Icons.checklist, Color(0xFF65451F)),
+    ShopItem("Daftar Item", Icons.checklist, Color(0xFF65451F)),
     ShopItem("Tambah Item", Icons.add_shopping_cart, Color(0xFF765827)),
     ShopItem("Logout", Icons.logout, Color(0xFF83764F)),
   ];
