@@ -20,6 +20,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
   final _formKey = GlobalKey<FormState>();
   String _name = "";
   int _amount = 0;
+  int _price = 0;
   String _description = "";
 
   @override
@@ -103,6 +104,40 @@ class _ShopFormPageState extends State<ShopFormPage> {
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
                 decoration: InputDecoration(
+                  hintText: "Price",
+                  labelText: "Price",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                onChanged: (String? value) {
+                  if (value != null && int.tryParse(value) != null) {
+                    int enteredValue = int.parse(value);
+                    if (enteredValue >= 0) {
+                      setState(() {
+                        _price = enteredValue;
+                      });
+                    }
+                  }
+                },
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Price tidak boleh kosong!";
+                  }
+                  if (int.tryParse(value) == null) {
+                    return "Price harus berupa angka!";
+                  }
+                  if (int.parse(value) < 0) {
+                    return "Price tidak boleh negatif!";
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                decoration: InputDecoration(
                   hintText: "Description",
                   labelText: "Description",
                   border: OutlineInputBorder(
@@ -135,12 +170,12 @@ class _ShopFormPageState extends State<ShopFormPage> {
                       // Kirim ke Django dan tunggu respons
                       // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                       final response = await request.postJson(
-                          "http://localhost:8000/create-flutter/",
+                          "https://novrizal-airsyahputra-tugas.pbp.cs.ui.ac.id/create-flutter/",
                           jsonEncode(<String, String>{
                             'name': _name,
                             'amount': _amount.toString(),
                             'description': _description,
-                            // TODO: Sesuaikan field data sesuai dengan aplikasimu
+                            'price': _price.toString(),
                           }));
                       if (response['status'] == 'success') {
                         ScaffoldMessenger.of(context)

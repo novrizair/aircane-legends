@@ -3,11 +3,10 @@
 //     final product = productFromJson(jsonString);
 
 import 'dart:convert';
-import 'dart:js_interop';
 
-Product productFromJson(String str) => Product.fromJson(json.decode(str));
+List<Product> productFromJson(String str) => List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
 
-String productToJson(Product data) => json.encode(data.toJson());
+String productToJson(List<Product> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Product {
   String model;
